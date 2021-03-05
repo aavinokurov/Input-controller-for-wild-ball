@@ -1,38 +1,30 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace WildBall.Inputs
 {
-    [RequireComponent(typeof(Rigidbody))]
+
+    [RequireComponent(typeof(PlayerMovement))]
     public class PlayerInput : MonoBehaviour
     {
-        private Rigidbody playerRigidbody;
+        private Vector3 movement;
+        private PlayerMovement playerMovement;
 
         private void Awake()
         {
-            playerRigidbody = GetComponent<Rigidbody>();
+            playerMovement = GetComponent<PlayerMovement>();
         }
 
         void Update()
         {
-            if (Input.GetKeyDown(KeyCode.A))
-            {
-                Debug.Log("Press [A]");
-            }
+            float horizontal = Input.GetAxis(GlobalStringVars.HORIZONTAL_AXIS);
+            float vertical = Input.GetAxis(GlobalStringVars.VERTICAL_AXIS);
 
-            if(Input.GetButtonDown(GlobalStringVars.JUMP_BUTTON))
-            {
-                Debug.Log("[Jump button] pressed");
-            }
+            movement = new Vector3(horizontal, 0, vertical).normalized;
+        }
 
-            if(Input.GetMouseButtonDown(0))
-            {
-                Debug.Log("Fire");
-            }
-
-            //Debug.Log(Input.GetAxis(GlobalStringVars.HORIZONTAL_AXIS));
-            //Debug.Log(Input.GetAxis(GlobalStringVars.VERTICAL_AXIS));
+        private void FixedUpdate()
+        {
+            playerMovement.MoveCharacter(movement);
         }
     }
 }
